@@ -1,5 +1,7 @@
+from branch_and_bound import *
+
 def main():
-    print('hola')
+    branch_and_bound() 
 
 if __name__ == '__main__':
     main()

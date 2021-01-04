@@ -7,11 +7,16 @@ class Node:
         self.variables = variables
         self.restriction = restriction
 
-def insert(root, node, dir):
-    if root is None:
-        root = node
-    else:
-        if(dir):
-
+    def insert(self, node, dir):
+        if dir == 'right':
+            if self.right is None:
+                self.right = node
+            else:
+                self.right.insert(node, 'right')
+        else:
+            if self.left is None:
+                self.left = node
+            else:
+                self.left.insert(node, 'left') 
 
         
