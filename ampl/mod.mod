@@ -8,11 +8,18 @@ param CapMax{I,F};
 param Costo{I,F};
 param P;
 
-var x{M,F,I}, >= 0;
+var x{M,I,F}, >= 0;
 var y{M}, binary;
+var w{M,I,F}, binary;
 
-minimize z: sum{m in M}(sum{f in F}(sum{i in I}(x[m,f,i]*Costo[i,f] + y[m]*P)));
+minimize z: sum{m in M, f in F, i in I}(x[m,i,f]*Costo[i,f]) + sum{m in M}(y[m]*P);
 
-subject to R1{m in M}: sum{f in F}(sum{i in I}(x[m,f,i])) <= D[m];
-subject to R3{f in F, i in I}: sum{m in M}(x[m,f,i]) <= CapMax[i,f];
-subject to R4{f in F, i in I}: sum{m in M}(x[m,f,i]) >= CapMin[i,f];
+#Demanda
+subject to R5{m in M}: sum{f in F, i in I}(x[m,i,f])/D[m] >= 1 - y[m];
+
+#Capacidad
+subject to R2{m in M, f in F, i in I}: x[m,i,f] <= w[m,i,f]*CapMax[i,f];
+subject to R3{m in M, f in F, i in I}: x[m,i,f] >= w[m,i,f]*CapMin[i,f];
+
+#Funcionamiento
+subject to R4{m in M,i in I}: sum{f in F}(w[m,i,f]) <= 1;
